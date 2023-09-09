@@ -1,0 +1,26 @@
+list1=list()
+list1.append(1)
+print(list1)
+for i in range(10):
+    list1.append(i)
+print(list1)
+list1.pop()
+print(list1)
+list1.remove(1)
+print(list1)
+list1.remove(1)
+print(list1)
+list1[3]=15
+list1[6]=3
+print(list1)
+list1.sort()
+print(list1)
+list1.sort(reverse=True)
+print(list1)
+list2=list()
+for i in range(2,21,2):
+    list2.append(i)
+print("Even Number list is: ", list2)
+print(list2[:3])
+print(list2[-3:-1])
+print(list2[-1])
