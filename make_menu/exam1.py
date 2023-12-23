@@ -4,14 +4,19 @@ import make_menu_new
 import add_to_list
 make_menu_new.menu_lists(450, 15, 25,t)
 import keyboard
+global listall
+listall=list()
+global num
 while (keyboard.read_key()!="e"):
     
     if keyboard.read_key() == "a":
         t.clear()
-        add_to_list.addToListMenu(t)
+        add_to_list.addToListMenu(t, listall)
     if keyboard.read_key() == "m":
         t.clear()
+       
         make_menu_new.menu_lists(450, 15, 25,t)
+        
 if keyboard.read_key() == "e":
     t.penup()
     t.clear()
