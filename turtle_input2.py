@@ -7,8 +7,9 @@ angle1=360/shape_z
 angle2=360/shape_num
 # width, color, speed
 # زوج ها يه رنگ براي فرد رنگ ديگه
+t1.width(5)
 for i in range(shape_num):
     for j in range(shape_z):
-        t1.forward(50)
+        t1.forward(100)
         t1.left(angle1)
     t1.left(angle2)
