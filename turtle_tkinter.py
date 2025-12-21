@@ -1,10 +1,13 @@
-import tkinter as tk
+
 import turtle
-
+import tkinter as tk
+# shape_z: تعداد ضلع
+# shape_num: تعداد شکل
 def draw_pattern():
-    shape_z = int(entry_sides.get())
-    shape_num = int(entry_shapes.get())
-
+    # clear()
+    # Call or use Entry
+    shape_z=int(shape_z_entry.get())
+    shape_num=int(shape_num_entry.get())
     angle1 = 360 / shape_z
     angle2 = 360 / shape_num
 
@@ -21,19 +24,23 @@ def draw_pattern():
             t1.left(angle1)
         t1.left(angle2)
 
-# ------------------- Tkinter Window ------------------- #
-root = tk.Tk()
-root.title("Shape Drawer")
 
-tk.Label(root, text="Number of sides:").grid(row=0, column=0)
-entry_sides = tk.Entry(root)
-entry_sides.grid(row=0, column=1)
+# کد های tkinter
+root=tk.Tk()
 
-tk.Label(root, text="Number of shapes:").grid(row=1, column=0)
-entry_shapes = tk.Entry(root)
-entry_shapes.grid(row=1, column=1)
+root.title("Make Shape based on edge and shape number")
 
-btn = tk.Button(root, text="Draw", command=draw_pattern)
-btn.grid(row=2, column=0, columnspan=2, pady=10)
+tk.Label(root, text="Edge number:  ").grid(row=0, column=0, pady=10)
+shape_z_entry=tk.Entry(root)
+shape_z_entry.grid(row=0, column=1, pady=10)
 
+tk.Label(root, text="Shape number:  ").grid(row=1, column=0, pady=10)
+shape_num_entry=tk.Entry(root)
+shape_num_entry.grid(row=1, column=1, pady=10)
+
+btn=tk.Button(root, text="Drawing", command=draw_pattern)
+btn.grid(row=2, column=1, pady=10)
 root.mainloop()
+
+
+
