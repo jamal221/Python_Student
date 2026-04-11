@@ -121,7 +121,7 @@ def show_books_command():
 
 
 # --- Buttons ---
-btn_add = tk.Button(root, text="Add Book", command=add_book_command)
+btn_add = tk.Button(root, text="Add Book", command=lib1.add_book)
 btn_add.grid(row=4, column=0, pady=15)
 
 btn_show = tk.Button(root, text="Show All Books", command=show_books_command)

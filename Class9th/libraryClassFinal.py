@@ -1,5 +1,6 @@
-import tkinter as tk
 import random
+import tkinter as tk
+from tkinter import messagebox
 
 
 
@@ -25,9 +26,7 @@ class book:
 class library:
     def __init__(self):
         self.books=[]
-    
     def add_book(self,book):
-        
         self.books.append(book)
     def make_book_random(self):
         ch=['a','b','c','d','e','f', 'A','B','C','D','E','F']
@@ -94,15 +93,21 @@ class library:
     def show_all_items(self):
         index=1
         res=self.books
+        result=''
         if len(res)!=0:
 
             for i in range(len(res)):
+                # result+=(f"{index}:  \n")
                 print(f"{index}:  \n")
                 # The print below has been override
+                # result+=(res[i])
                 print(res[i])
                 index+=1
+            # return result
+            # resultLabel.configure(text=result)
         else:
-            print("Nothing is to show for the search result..")
+            return "Nothing is to show for the search result.."
+            # resultLabel.configure(text="Nothing is to show for the search result..")
 
     def delBook(self, listIndex):
         for index in sorted(listIndex, reverse=True):
@@ -134,14 +139,56 @@ class library:
         else:
             for index in resIndexes:
                 self.books[index].name=bookName2
-
+    def add_book_by_tkinter(self):
+        try:
+            # گرفتن مقادیر از فرم tkinter
+            name=entry_name.get().strip()
+            author=entry_author.get().strip()
+            language=entry_language.get().strip()
+            page=int(entry_pages.get().strip())
+            # ایجاد کلاس کتاب در کتابخانه
+            book1=book(name,author,language,page)
+            self.add_book(book1)
+            messagebox.showinfo(title='success', message=f'The book {name}  added successfuly, .....')
+            entry_name.delete(0, tk.END)
+            entry_author.delete(0, tk.END)
+            entry_language.delete(0, tk.END)
+            entry_pages.delete(0, tk.END)
+        except:
+            messagebox.showerror(title='error in system', message='There is an error in your code...')
         
+
+
 lib1=library()
-for i in range(6):
-    bookRandom=lib1.make_book_random()
-    lib1.add_book(bookRandom)
+root=tk.Tk()
+root.title('The Library class...')
+
+tk.Label(root, text='Book Name: ').grid(row=0, column=0, pady=5)
+entry_name=tk.Entry(root, width=30)
+entry_name.grid(row=0, column=1, pady=5)
+
+tk.Label(root, text="Author:").grid(row=1, column=0, pady=5)
+entry_author = tk.Entry(root, width=30)
+entry_author.grid(row=1, column=1)
+
+tk.Label(root, text="Language:").grid(row=2, column=0, pady=5)
+entry_language = tk.Entry(root, width=30)
+entry_language.grid(row=2, column=1)
+
+tk.Label(root, text="Pages:").grid(row=3, column=0, pady=5)
+entry_pages = tk.Entry(root, width=30)
+entry_pages.grid(row=3, column=1)
+
+btn_add=tk.Button(root, text='Add Book', command=lib1.add_book_by_tkinter)
+btn_add.grid(row=4, column=0, pady=5)
+
+root.mainloop()
 
 lib1.show_all_items()
+        
+
+
+
 
 
 
