@@ -1,5 +1,6 @@
 import random
 import tkinter as tk
+from tkinter import ttk
 from tkinter import messagebox
 
 
@@ -156,6 +157,30 @@ class library:
             entry_pages.delete(0, tk.END)
         except:
             messagebox.showerror(title='error in system', message='There is an error in your code...')
+    def show_data_by_tkinter(self):
+        dataWindow=tk.Toplevel(root)
+        dataWindow.title('Show data...')
+        
+        table=ttk.Treeview(dataWindow,columns=("Name","Author","Language","Page"), show="headings")
+        table.heading("Name", text="Name")
+        table.heading("Author", text="Author")
+        table.heading("Language", text="Language")
+        table.heading("Page", text="Page")
+
+        table.column("Name", width=120)
+        table.column("Author", width=120)
+        table.column("Language", width=80)
+        table.column("Page", width=60)
+
+
+
+
+
+        for book in self.books:
+            table.insert("","end",values=(book.name, book.outhor, book.language, book.pages))
+
+        table.pack(padx=2, pady=10, fill=tk.BOTH, expand=True)
+    
         
 
 
@@ -182,9 +207,14 @@ entry_pages.grid(row=3, column=1)
 btn_add=tk.Button(root, text='Add Book', command=lib1.add_book_by_tkinter)
 btn_add.grid(row=4, column=0, pady=5)
 
+btn_show=tk.Button(root, text='Show Books', command=lib1.show_data_by_tkinter)
+btn_show.grid(row=4, column=1, pady=5)
+
+
+
 root.mainloop()
 
-lib1.show_all_items()
+# lib1.show_all_items()
         
 
 
