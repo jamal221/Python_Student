@@ -2,23 +2,23 @@ import random
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+import sqlite3
+
 
 
 
 class book:
-    def __init__(self,name, outhor, langauge, pages, status):
+    def __init__(self,name, outhor, langauge, pages):
         self.name=name
         self.outhor=outhor
         self.language=langauge
         self.pages=pages
-        self.status=status
     def __str__(self):
         return(
             f"The book name: {self.name}\n"
             f"The book outhor: {self.outhor}\n"
             f"The book main Language:  {self.language}\n"
-            f"The book pages:  {self.pages}\n"
-            f"The Book status is: {self.status}"
+            f"The book pages:  {self.pages}"
         )
 
 
@@ -28,13 +28,34 @@ class book:
 
 class library:
     def __init__(self):
-        self.books=[]
-    def add_book(self,book):
-        self.books.append(book)
+        # make connection
+        self.conn = sqlite3.connect("library.db")
+        self.cursor = self.conn.cursor()
+        # self.books=[]
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS books (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            outhor TEXT,
+            language TEXT,
+            pages INTEGER
+        )
+        """)
+
+        self.conn.commit()
+    def add_book(self, book):
+        query="INSERT INTO books (name, outhor, language, pages) VALUES (?, ?, ?, ?)"
+        self.cursor.execute(
+            query,
+            (book.name, book.outhor, book.language, book.pages)
+        )
+        self.conn.commit()
+
+
+
     def make_book_random(self):
         ch=['a','b','c','d','e','f', 'A','B','C','D','E','F']
         lang=['Farsi', 'English', 'Kurdish','Turkish','Arabic']
-        statusList=['old','new']
         # قرار: اسم کتاب 6 حرفی باشه
         # 2: نام نویسنده 8 حرفی باشه
         bookName=''
@@ -48,8 +69,7 @@ class library:
         index=random.randint(0, len(lang)-1)
         langName=lang[index]
         bookPage=random.randint(10,500)
-        bookStatus=statusList[random.randint(0,1)]
-        book1=book(bookName,outhorName,langName,bookPage,bookStatus)
+        book1=book(bookName,outhorName,langName,bookPage)
         return book1
 
     
@@ -145,44 +165,42 @@ class library:
             for index in resIndexes:
                 self.books[index].name=bookName2
     def add_book_by_tkinter(self):
-        try:
+        # try:
             # گرفتن مقادیر از فرم tkinter
             name=entry_name.get().strip()
             author=entry_author.get().strip()
             language=entry_language.get().strip()
             page=int(entry_pages.get().strip())
-            bookStatus=selected_status.get()
             # ایجاد کلاس کتاب در کتابخانه
-            book1=book(name,author,language,page,bookStatus)
+            book1=book(name,author,language,page)
             self.add_book(book1)
             messagebox.showinfo(title='success', message=f'The book {name}  added successfuly, .....')
             entry_name.delete(0, tk.END)
             entry_author.delete(0, tk.END)
             entry_language.delete(0, tk.END)
             entry_pages.delete(0, tk.END)
-        except:
-            messagebox.showerror(title='error in system', message='There is an error in your code...')
+        # except:
+        #     messagebox.showerror(title='error in system', message='There is an error in your code...')
     def show_data_by_tkinter(self):
+        self.cursor.execute("SELECT * FROM books")
+        books = self.cursor.fetchall()
+
         dataWindow=tk.Toplevel(root)
         dataWindow.title('Show data...')
         
-        table=ttk.Treeview(dataWindow,columns=("Name","Author","Language","Page", "Status"), show="headings")
+        table=ttk.Treeview(dataWindow,columns=("Name","Author","Language","Page"), show="headings")
         table.heading("Name", text="Name")
         table.heading("Author", text="Author")
         table.heading("Language", text="Language")
         table.heading("Page", text="Page")
-        table.heading("Status", text="Status")
-
 
         table.column("Name", width=120)
         table.column("Author", width=120)
         table.column("Language", width=80)
         table.column("Page", width=60)
-        table.heading("Status", text="Status")
 
-
-        for book in self.books:
-            table.insert("","end",values=(book.name, book.outhor, book.language, book.pages, book.status))
+        for book in books:
+            table.insert("","end",values=(book[1], book[2], book[3], book[4]))
 
         table.pack(padx=2, pady=10, fill=tk.BOTH, expand=True)
     def make_random_by_btn_tkinter(self):
@@ -229,22 +247,14 @@ tk.Label(root, text="Pages:").grid(row=3, column=0, pady=5)
 entry_pages = tk.Entry(root, width=30)
 entry_pages.grid(row=3, column=1)
 
-selected_status = tk.StringVar(value="old")  # default selected
-
-btn_old = tk.Radiobutton(root, text="Old",  variable=selected_status, value="old")
-btn_old.grid(row=4, column=0)
-
-btn_new = tk.Radiobutton(root, text="New",  variable=selected_status, value="new")
-btn_new.grid(row=4, column=1)
-
 btn_add=tk.Button(root, text='Add Book', command=lib1.add_book_by_tkinter)
-btn_add.grid(row=5, column=0, pady=5)
+btn_add.grid(row=4, column=0, pady=5)
 
 btn_show=tk.Button(root, text='Show Books', command=lib1.show_data_by_tkinter)
-btn_show.grid(row=6, column=1, pady=5)
+btn_show.grid(row=4, column=1, pady=5)
 
 btn_make_random=tk.Button(root, text='random Books', command=lib1.make_random_by_btn_tkinter)
-btn_make_random.grid(row=7, column=0, pady=5)
+btn_make_random.grid(row=5, column=0, pady=5)
 
 
 
