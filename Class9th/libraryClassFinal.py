@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 
+from PIL import Image, ImageTk
+
 
 
 class book:
@@ -178,7 +180,7 @@ class library:
         table.column("Author", width=120)
         table.column("Language", width=80)
         table.column("Page", width=60)
-        table.heading("Status", text="Status")
+        table.column("Status", text=60)
 
 
         for book in self.books:
@@ -212,6 +214,12 @@ class library:
 lib1=library()
 root=tk.Tk()
 root.title('The Library class...')
+root.geometry("800x600")
+
+# Load and resize the image (PIL makes this easy)
+img = Image.open("background.jpg")
+img = img.resize((800, 600), Image.Resampling.LANCZOS)
+bg = ImageTk.PhotoImage(img)
 
 tk.Label(root, text='Book Name: ').grid(row=0, column=0, pady=5)
 entry_name=tk.Entry(root, width=30)
